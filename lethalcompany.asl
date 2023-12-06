@@ -5,44 +5,42 @@ state("Lethal Company")
 
 startup
 {
-    Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
+	Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 	vars.Helper.LoadSceneManager = true;
 }
 
 init
 {
-    vars.Helper.TryLoad = (Func<dynamic, bool>)(mono =>
-    {
-	vars.Helper["loading"] = mono.Make<bool>("HUDManager", "Instance", "loadingDarkenScreen", 0x10, 0x39);
-	vars.Helper["displayingNewQuota"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
+	vars.Helper.TryLoad = (Func<dynamic, bool>)(mono =>
+	{
+		vars.Helper["loading"] = mono.Make<bool>("HUDManager", "Instance", "loadingDarkenScreen", 0x10, 0x39);
+		vars.Helper["displayingNewQuota"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
 
-        return true;
-    });
+		return true;
+	});
 }
 
 update
 {
-    current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
+	current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
 }
 
 start
 {
-	if((current.firstTimeSpawningEnemies == true) && (old.firstTimeSpawningEnemies == false)){
-		return true;
-	}
+	return current.firstTimeSpawningEnemies == true
+		&& old.firstTimeSpawningEnemies == false;
 }
 
 split
 {
-	if((current.displayingNewQuota == true) && (old.displayingNewQuota == false)){
-		return true;
-	}
+	return current.displayingNewQuota == true
+		&& old.displayingNewQuota == false;
 }
 
 reset
 {
-    return old.Scene != current.Scene
-        && current.Scene == "MainMenu";
+	return old.Scene != current.Scene
+		&& current.Scene == "MainMenu";
 }
 
 isLoading
