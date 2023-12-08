@@ -8,10 +8,16 @@ startup
 {
 	Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 	vars.Helper.LoadSceneManager = true;
+	
 	settings.Add("bestiary", false, "Bestiary%");
 	settings.SetToolTip("bestiary", "Splits when checking the bestiary in the terminal and having found all creatures, only tick if you're running Bestiary%");
+	
+	settings.Add("scanSplits", false, "Split when new creature is scanned", "bestiary");
+	settings.SetToolTip("scanSplits", "Splits every time a new creature is scanned (you will need 17 splits total)");
+	
 	settings.Add("levelHundo", false, "Level 100%");
 	settings.SetToolTip("levelHundo", "Splits when scanning for items in the terminal and finding none, only tick if you're running Level 100%");
+	
 	settings.Add("death", false, "Death%");
 	settings.SetToolTip("death", "Splits on death, only tick if you're running Death%");
 }
@@ -52,6 +58,11 @@ start
 split
 {
 	if (current.displayingNewQuota == true && old.displayingNewQuota == false && settings["bestiary"] == false)
+	{
+		return true;
+	}
+	
+	if (settings["bestiary"] == true && settings["scanSplits"] == true && !current.scanCount.Equals(old.scanCount))
 	{
 		return true;
 	}
