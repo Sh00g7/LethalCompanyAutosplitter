@@ -95,7 +95,7 @@ start
 
 split
 {
-	if (current.displayingNewQuota == true && old.displayingNewQuota == false && settings["bestiary"] == false)
+	if (current.displayingNewQuota == true && old.displayingNewQuota == false && settings["bestiary"] == false && settings["death"] == false)
 	{
 		return true;
 	}
