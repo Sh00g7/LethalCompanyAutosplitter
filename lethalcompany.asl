@@ -24,6 +24,17 @@ startup
 
 init
 {
+	if (timer.CurrentTimingMethod == TimingMethod.RealTime) {
+		var timingMessage = MessageBox.Show(
+			"Lethal Company speedrunning rules require the timer to be set to Game Time.\n"+
+			"LiveSplit is currently set to show Real Time (RTA).\n"+
+			"It will now be changed to Game Time.\n"+
+			"(You can change it back to Real Time with Right Click > Compare Against > Real Time)",
+			"Lethal Company Autosplitter",
+			MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+		
+		timer.CurrentTimingMethod = TimingMethod.GameTime;
+	}
 	vars.shouldStart = 0;
 	
 	vars.Helper.TryLoad = (Func<dynamic, bool>)(mono =>
