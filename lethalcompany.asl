@@ -21,6 +21,9 @@ startup
 	settings.Add("death", false, "Death%");
 	settings.SetToolTip("death", "Splits on death, only tick if you're running Death%");
 	
+	settings.Add("company", false, "Company", "death");
+	settings.SetToolTip("company", "Split when dying on The Company Building");
+	
 	settings.Add("experimentation", false, "Experimentation", "death");
 	settings.SetToolTip("experimentation", "Split when dying on Experimentation");
 	
@@ -80,8 +83,6 @@ update
 	{
 		vars.shouldStart = 1;
 	}
-	
-	print(current.PlanetName);
 }
 
 start
@@ -117,6 +118,10 @@ split
 	
 	if (settings["death"] == true && current.allPlayersDead == true)
 	{
+		if (settings["company"] == true && current.PlanetName.Contains("Gordion"))
+		{
+			return true;
+		}
 		if (settings["experimentation"] == true && current.PlanetName.Contains("Experimentation"))
 		{
 			return true;
