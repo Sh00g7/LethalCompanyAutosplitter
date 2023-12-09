@@ -20,6 +20,30 @@ startup
 	
 	settings.Add("death", false, "Death%");
 	settings.SetToolTip("death", "Splits on death, only tick if you're running Death%");
+	
+	settings.Add("experimentation", false, "Experimentation", "death");
+	settings.SetToolTip("experimentation", "Split when dying on Experimentation");
+	
+	settings.Add("assurance", false, "Assurance", "death");
+	settings.SetToolTip("assurance", "Split when dying on Assurance");
+	
+	settings.Add("vow", false, "Vow", "death");
+	settings.SetToolTip("vow", "Split when dying on Vow");
+	
+	settings.Add("offense", false, "Offense", "death");
+	settings.SetToolTip("offense", "Split when dying on Offense");
+	
+	settings.Add("march", false, "March", "death");
+	settings.SetToolTip("march", "Split when dying on March");
+	
+	settings.Add("rend", false, "Rend", "death");
+	settings.SetToolTip("rend", "Split when dying on Rend");
+	
+	settings.Add("dine", false, "Dine", "death");
+	settings.SetToolTip("dine", "Split when dying on Dine");
+	
+	settings.Add("titan", false, "Titan", "death");
+	settings.SetToolTip("titan", "Split when dying on Titan");
 }
 
 init
@@ -42,6 +66,7 @@ init
 		vars.Helper["loading"] = mono.Make<bool>("HUDManager", "Instance", "loadingDarkenScreen", 0x10, 0x39);
 		vars.Helper["displayingNewQuota"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
 		vars.Helper["allPlayersDead"] = mono.Make<bool>("StartOfRound", "Instance", "allPlayersDead");
+		vars.Helper["PlanetName"] = mono.MakeString("StartOfRound", "Instance", "currentLevel", "PlanetName");
 
 		return true;
 	});
@@ -55,6 +80,8 @@ update
 	{
 		vars.shouldStart = 1;
 	}
+	
+	print(current.PlanetName);
 }
 
 start
@@ -90,7 +117,38 @@ split
 	
 	if (settings["death"] == true && current.allPlayersDead == true)
 	{
-		return true;
+		if (settings["experimentation"] == true && current.PlanetName.Contains("Experimentation"))
+		{
+			return true;
+		}
+		if (settings["assurance"] == true && current.PlanetName.Contains("Assurance"))
+		{
+			return true;
+		}
+		if (settings["vow"] == true && current.PlanetName.Contains("Vow"))
+		{
+			return true;
+		}
+		if (settings["offense"] == true && current.PlanetName.Contains("Offense"))
+		{
+			return true;
+		}
+		if (settings["march"] == true && current.PlanetName.Contains("March"))
+		{
+			return true;
+		}
+		if (settings["rend"] == true && current.PlanetName.Contains("Rend"))
+		{
+			return true;
+		}
+		if (settings["dine"] == true && current.PlanetName.Contains("Dine"))
+		{
+			return true;
+		}
+		if (settings["titan"] == true && current.PlanetName.Contains("Titan"))
+		{
+			return true;
+		}
 	}
 }
 
