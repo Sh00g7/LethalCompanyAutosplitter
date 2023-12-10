@@ -1,76 +1,93 @@
-state("Lethal Company")
-{
-	string50 currentText: "UnityPlayer.dll", 0x01BE9D00, 0x1A8, 0x198, 0x1B8, 0x78, 0x60, 0xC8, 0x1A;
-	byte scanCount: "UnityPlayer.dll", 0x01BE9D00, 0x1A8, 0x198, 0x1B8, 0x78, 0x60, 0x128, 0x18;
-}
+state("Lethal Company") {}
 
 startup
 {
 	Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 	vars.Helper.LoadSceneManager = true;
-	
-	settings.Add("bestiary", false, "Bestiary%");
-	settings.SetToolTip("bestiary", "Splits when checking the bestiary in the terminal and having found all creatures, only tick if you're running Bestiary%");
-	
-	settings.Add("scanSplits", false, "Split when new creature is scanned", "bestiary");
-	settings.SetToolTip("scanSplits", "Splits every time a new creature is scanned (you will need 17 splits total on v40, or 19 splits total on v45)");
-	
-	settings.Add("levelHundo", false, "Level 100%");
-	settings.SetToolTip("levelHundo", "Splits when scanning for items in the terminal and finding none, only tick if you're running Level 100%");
-	
-	settings.Add("death", false, "Death%");
-	settings.SetToolTip("death", "Splits on death, only tick if you're running Death%");
-	
-	settings.Add("company", false, "Company", "death");
-	settings.SetToolTip("company", "Split when dying on The Company Building");
-	
-	settings.Add("experimentation", false, "Experimentation", "death");
-	settings.SetToolTip("experimentation", "Split when dying on Experimentation");
-	
-	settings.Add("assurance", false, "Assurance", "death");
-	settings.SetToolTip("assurance", "Split when dying on Assurance");
-	
-	settings.Add("vow", false, "Vow", "death");
-	settings.SetToolTip("vow", "Split when dying on Vow");
-	
-	settings.Add("offense", false, "Offense", "death");
-	settings.SetToolTip("offense", "Split when dying on Offense");
-	
-	settings.Add("march", false, "March", "death");
-	settings.SetToolTip("march", "Split when dying on March");
-	
-	settings.Add("rend", false, "Rend", "death");
-	settings.SetToolTip("rend", "Split when dying on Rend");
-	
-	settings.Add("dine", false, "Dine", "death");
-	settings.SetToolTip("dine", "Split when dying on Dine");
-	
-	settings.Add("titan", false, "Titan", "death");
-	settings.SetToolTip("titan", "Split when dying on Titan");
+
+	dynamic[,] _settings =
+	{
+		{ null, "general", "General Splits" },
+			{ "general", "quotaReached", "Split when the 'Quota Reached!' message appears" },
+
+		{ null, "levels", "Level Splits" },
+			{ "levels", "l0", "Experimentation" },
+				{ "l0", "l0-d", "Split upon Death" },
+				{ "l0", "l0-l", "Split upon Leaving" },
+				{ "l0", "l0-h", "Split upon 100%ing" },
+			{ "levels", "l1", "Assurance" },
+				{ "l1", "l1-d", "Split upon Death" },
+				{ "l1", "l1-l", "Split upon Leaving" },
+				{ "l1", "l1-h", "Split upon 100%ing" },
+			{ "levels", "l2", "Vow" },
+				{ "l2", "l2-d", "Split upon Death" },
+				{ "l2", "l2-l", "Split upon Leaving" },
+				{ "l2", "l2-h", "Split upon 100%ing" },
+			{ "levels", "l3", "Gordion" },
+				{ "l3", "l3-d", "Split upon Death" },
+				{ "l3", "l3-l", "Split upon Leaving" },
+				{ "l3", "l3-h", "Split upon 100%ing" },
+			{ "levels", "l4", "March" },
+				{ "l4", "l4-d", "Split upon Death" },
+				{ "l4", "l4-l", "Split upon Leaving" },
+				{ "l4", "l4-h", "Split upon 100%ing" },
+			{ "levels", "l5", "Rend" },
+				{ "l5", "l5-d", "Split upon Death" },
+				{ "l5", "l5-l", "Split upon Leaving" },
+				{ "l5", "l5-h", "Split upon 100%ing" },
+			{ "levels", "l6", "Dine" },
+				{ "l6", "l6-d", "Split upon Death" },
+				{ "l6", "l6-l", "Split upon Leaving" },
+				{ "l6", "l6-h", "Split upon 100%ing" },
+			{ "levels", "l7", "Offense" },
+				{ "l7", "l7-d", "Split upon Death" },
+				{ "l7", "l7-l", "Split upon Leaving" },
+				{ "l7", "l7-h", "Split upon 100%ing" },
+			{ "levels", "l8", "Titan" },
+				{ "l8", "l8-d", "Split upon Death" },
+				{ "l8", "l8-l", "Split upon Leaving" },
+				{ "l8", "l8-h", "Split upon 100%ing" },
+
+		{ null, "bestiary", "Bestiary Splits" },
+			{ "bestiary", "creatures", "Scan a Creature" },
+				{ "creatures", "c0", "Snare flea" },
+				{ "creatures", "c1", "Bracken" },
+				{ "creatures", "c2", "Thumper" },
+				{ "creatures", "c3", "Eyeless dog" },
+				{ "creatures", "c4", "Hoarding bug" },
+				{ "creatures", "c5", "Hygrodere" },
+				{ "creatures", "c6", "Forest keeper" },
+				{ "creatures", "c7", "Coil-head" },
+				{ "creatures", "c9", "Earth leviathan" },
+				{ "creatures", "c10", "Jester" },
+				{ "creatures", "c11", "Spore lizard" },
+				{ "creatures", "c12", "Bunker spider" },
+				{ "creatures", "c13", "Manticoil" },
+				{ "creatures", "c14", "Circuit bee" },
+				{ "creatures", "c15", "Roaming locust" },
+				{ "creatures", "c16", "Baboon hawk" },
+				{ "creatures", "c17", "Nutcracker" },
+			{ "bestiary", "completeBestiary", "Complete Bestiary" }
+	};
+
+	vars.Helper.Settings.CreateCustom(_settings, false, null, 4, 1, 3);
+	vars.Helper.AlertLoadless();
 }
 
 init
 {
-	if (timer.CurrentTimingMethod == TimingMethod.RealTime) {
-		var timingMessage = MessageBox.Show(
-			"Lethal Company speedrunning rules require the timer to be set to Game Time.\n"+
-			"LiveSplit is currently set to show Real Time (RTA).\n"+
-			"It will now be changed to Game Time.\n"+
-			"(You can change it back to Real Time with Right Click > Compare Against > Real Time)",
-			"Lethal Company Autosplitter",
-			MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-		
-		timer.CurrentTimingMethod = TimingMethod.GameTime;
-	}
-	vars.shouldStart = 0;
-	
 	vars.Helper.TryLoad = (Func<dynamic, bool>)(mono =>
 	{
-		vars.Helper["loading"] = mono.Make<bool>("HUDManager", "Instance", "loadingDarkenScreen", 0x10, 0x39);
-		vars.Helper["displayingNewQuota"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
-		vars.Helper["allPlayersDead"] = mono.Make<bool>("StartOfRound", "Instance", "allPlayersDead");
-		vars.Helper["PlanetName"] = mono.MakeString("StartOfRound", "Instance", "currentLevel", "PlanetName");
-		vars.Helper["gameVersionNum"] = mono.Make<int>("GameNetworkManager", "Instance", "gameVersionNum");
+		vars.Helper["LevelId"] = mono.Make<int>("RoundManager", "Instance", "currentLevel", "levelID");
+
+		vars.Helper["QuotaReached"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
+		vars.Helper["Loading"] = mono.Make<bool>("HUDManager", "Instance", "loadingDarkenScreen", 0x10, 0x39); // UnityEngine.Object.m_CachedPtr.m_Active
+		vars.Helper["TerminalText"] = mono.MakeString("HUDManager", "Instance", "terminalScript", "currentNode", "displayText");
+		vars.Helper["TotalEnemies"] = mono.Make<int>("HUDManager", "Instance", "terminalScript", "enemyFiles", 0x18); // List<T>._size
+		vars.Helper["ScannedEnemies"] = mono.MakeList<int>("HUDManager", "Instance", "terminalScript", "scannedEnemyIDs");
+
+		vars.Helper["AllPlayersDead"] = mono.Make<bool>("StartOfRound", "Instance", "allPlayersDead");
+		vars.Helper["ShipLeaving"] = mono.Make<bool>("StartOfRound", "Instance", "shipIsLeaving");
 
 		return true;
 	});
@@ -79,102 +96,54 @@ init
 update
 {
 	current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
-	
-	if (current.loading == true)
-	{
-		vars.shouldStart = 1;
-	}
-	
-	print(current.gameVersionNum.ToString());
 }
 
 start
 {
-	if (current.loading == false && vars.shouldStart == 1)
-	{
-		vars.shouldStart = 0;
-		return true;
-	}
+	return old.Loading && current.Loading;
 }
 
 split
 {
-	if (current.displayingNewQuota == true && old.displayingNewQuota == false && settings["bestiary"] == false && settings["death"] == false)
+	if (old.ScannedEnemies.Count < current.ScannedEnemies.Count)
+	{
+		int i = current.ScannedEnemies.Count - 1;
+		return settings["c" + current.ScannedEnemies[i]];
+	}
+
+	if (old.TerminalText != current.TerminalText && current.TerminalText.StartsWith("BESTIARY", StringComparison.Ordinal)
+		&& current.ScannedEnemies.Count == current.TotalEnemies)
+	{
+		return settings["completeBestiary"];
+	}
+
+	if (!old.QuotaReached && current.QuotaReached && settings["quotaReached"])
 	{
 		return true;
 	}
-	
-	if (settings["bestiary"] == true && settings["scanSplits"] == true && !current.scanCount.Equals(old.scanCount))
+
+	if (!old.AllPlayersDead && current.AllPlayersDead)
 	{
-		return true;
+		return settings["l" + current.LevelId + "-d"];
+	}
+
+	if (!old.ShipLeaving && current.ShipLeaving)
+	{
+		return settings["l" + current.LevelId + "-l"];
 	}
 	
-	if (settings["bestiary"] == true && current.currentText.StartsWith("BESTIARY") && !old.currentText.StartsWith("BESTIARY"))
+	if (old.TerminalText != current.TerminalText && current.TerminalText.StartsWith("There are 0 objects", StringComparison.Ordinal))
 	{
-		if (current.gameVersionNum == 40 && current.scanCount.Equals(0x10))
-		{
-			return true;
-		}
-		
-		if (current.gameVersionNum == 45 && current.scanCount.Equals(0x12))
-		{
-			return true;
-		}
-	}
-	
-	if (settings["levelHundo"] == true && current.currentText.StartsWith("There are 0 objects"))
-	{
-		return true;
-	}
-	
-	if (settings["death"] == true && current.allPlayersDead == true)
-	{
-		if (settings["company"] == true && current.PlanetName.Contains("Gordion"))
-		{
-			return true;
-		}
-		if (settings["experimentation"] == true && current.PlanetName.Contains("Experimentation"))
-		{
-			return true;
-		}
-		if (settings["assurance"] == true && current.PlanetName.Contains("Assurance"))
-		{
-			return true;
-		}
-		if (settings["vow"] == true && current.PlanetName.Contains("Vow"))
-		{
-			return true;
-		}
-		if (settings["offense"] == true && current.PlanetName.Contains("Offense"))
-		{
-			return true;
-		}
-		if (settings["march"] == true && current.PlanetName.Contains("March"))
-		{
-			return true;
-		}
-		if (settings["rend"] == true && current.PlanetName.Contains("Rend"))
-		{
-			return true;
-		}
-		if (settings["dine"] == true && current.PlanetName.Contains("Dine"))
-		{
-			return true;
-		}
-		if (settings["titan"] == true && current.PlanetName.Contains("Titan"))
-		{
-			return true;
-		}
+		return settings["l" + current.LevelId + "-h"];
 	}
 }
 
 reset
 {
-	return old.Scene != current.Scene
-		&& current.Scene == "MainMenu";
+	return old.Scene != "MainMenu" && current.Scene == "MainMenu";
 }
 
 isLoading
 {
-	return current.loading;
+	return current.Loading;
 }
