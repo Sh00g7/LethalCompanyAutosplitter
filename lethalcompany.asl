@@ -13,7 +13,7 @@ startup
 	settings.SetToolTip("bestiary", "Splits when checking the bestiary in the terminal and having found all creatures, only tick if you're running Bestiary%");
 	
 	settings.Add("scanSplits", false, "Split when new creature is scanned", "bestiary");
-	settings.SetToolTip("scanSplits", "Splits every time a new creature is scanned (you will need 17 splits total)");
+	settings.SetToolTip("scanSplits", "Splits every time a new creature is scanned (you will need 17 splits total on v40, or 19 splits total on v45)");
 	
 	settings.Add("levelHundo", false, "Level 100%");
 	settings.SetToolTip("levelHundo", "Splits when scanning for items in the terminal and finding none, only tick if you're running Level 100%");
@@ -70,6 +70,7 @@ init
 		vars.Helper["displayingNewQuota"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
 		vars.Helper["allPlayersDead"] = mono.Make<bool>("StartOfRound", "Instance", "allPlayersDead");
 		vars.Helper["PlanetName"] = mono.MakeString("StartOfRound", "Instance", "currentLevel", "PlanetName");
+		vars.Helper["gameVersionNum"] = mono.Make<int>("GameNetworkManager", "Instance", "gameVersionNum");
 
 		return true;
 	});
@@ -83,6 +84,8 @@ update
 	{
 		vars.shouldStart = 1;
 	}
+	
+	print(current.gameVersionNum.ToString());
 }
 
 start
@@ -106,9 +109,17 @@ split
 		return true;
 	}
 	
-	if (settings["bestiary"] == true && current.currentText.StartsWith("BESTIARY") && !old.currentText.StartsWith("BESTIARY") && current.scanCount.Equals(0x10))
+	if (settings["bestiary"] == true && current.currentText.StartsWith("BESTIARY") && !old.currentText.StartsWith("BESTIARY"))
 	{
-		return true;
+		if (current.gameVersionNum == 40 && current.scanCount.Equals(0x10))
+		{
+			return true;
+		}
+		
+		if (current.gameVersionNum == 45 && current.scanCount.Equals(0x12))
+		{
+			return true;
+		}
 	}
 	
 	if (settings["levelHundo"] == true && current.currentText.StartsWith("There are 0 objects"))
