@@ -11,6 +11,10 @@ startup
 			{ "general", "quotaReached", true, "Split when the 'Quota Reached!' message appears" },
 
 		{ null, "levels", false, "Level Splits" },
+			{ "levels", "l3", false, "The Company Building" },
+				{ "l3", "l3-d", false, "Split upon Death" },
+				{ "l3", "l3-l", false, "Split upon Leaving" },
+				{ "l3", "l3-h", false, "Split upon 100%ing" },
 			{ "levels", "l0", false, "Experimentation" },
 				{ "l0", "l0-d", false, "Split upon Death" },
 				{ "l0", "l0-l", false, "Split upon Leaving" },
@@ -23,10 +27,10 @@ startup
 				{ "l2", "l2-d", false, "Split upon Death" },
 				{ "l2", "l2-l", false, "Split upon Leaving" },
 				{ "l2", "l2-h", false, "Split upon 100%ing" },
-			{ "levels", "l3", false, "Gordion" },
-				{ "l3", "l3-d", false, "Split upon Death" },
-				{ "l3", "l3-l", false, "Split upon Leaving" },
-				{ "l3", "l3-h", false, "Split upon 100%ing" },
+			{ "levels", "l7", false, "Offense" },
+				{ "l7", "l7-d", false, "Split upon Death" },
+				{ "l7", "l7-l", false, "Split upon Leaving" },
+				{ "l7", "l7-h", false, "Split upon 100%ing" },
 			{ "levels", "l4", false, "March" },
 				{ "l4", "l4-d", false, "Split upon Death" },
 				{ "l4", "l4-l", false, "Split upon Leaving" },
@@ -39,10 +43,6 @@ startup
 				{ "l6", "l6-d", false, "Split upon Death" },
 				{ "l6", "l6-l", false, "Split upon Leaving" },
 				{ "l6", "l6-h", false, "Split upon 100%ing" },
-			{ "levels", "l7", false, "Offense" },
-				{ "l7", "l7-d", false, "Split upon Death" },
-				{ "l7", "l7-l", false, "Split upon Leaving" },
-				{ "l7", "l7-h", false, "Split upon 100%ing" },
 			{ "levels", "l8", false, "Titan" },
 				{ "l8", "l8-d", false, "Split upon Death" },
 				{ "l8", "l8-l", false, "Split upon Leaving" },
@@ -96,11 +96,13 @@ init
 update
 {
 	current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
+	
+	print(current.LevelId.ToString());
 }
 
 start
 {
-	return old.Loading && current.Loading;
+	return old.Loading && !current.Loading;
 }
 
 split
