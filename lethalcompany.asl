@@ -111,7 +111,7 @@ split
 		return settings["c" + current.ScannedEnemies[i]];
 	}
 
-	if (old.TerminalText != current.TerminalText && current.TerminalText.StartsWith("BESTIARY", StringComparison.Ordinal)
+	if (old.TerminalText != current.TerminalText && current.TerminalText.Contains("BESTIARY")
 		&& current.ScannedEnemies.Count == current.TotalEnemies)
 	{
 		return settings["completeBestiary"];
