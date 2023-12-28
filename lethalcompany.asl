@@ -96,8 +96,6 @@ init
 update
 {
 	current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
-	
-	print(current.LevelId.ToString());
 }
 
 start
@@ -134,7 +132,7 @@ split
 		return settings["l" + current.LevelId + "-l"];
 	}
 	
-	if (old.TerminalText != current.TerminalText && current.TerminalText.StartsWith("There are 0 objects", StringComparison.Ordinal))
+	if (old.TerminalText != current.TerminalText && current.TerminalText.Contains("There are 0 objects"))
 	{
 		return settings["l" + current.LevelId + "-h"];
 	}
