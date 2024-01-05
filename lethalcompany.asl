@@ -82,7 +82,7 @@ init
 
 		vars.Helper["QuotaReached"] = mono.Make<bool>("HUDManager", "Instance", "displayingNewQuota");
 		vars.Helper["Loading"] = mono.Make<bool>("HUDManager", "Instance", "loadingDarkenScreen", 0x10, 0x39); // UnityEngine.Object.m_CachedPtr.m_Active
-		vars.Helper["TerminalText"] = mono.MakeString("HUDManager", "Instance", "terminalScript", "currentNode", "displayText");
+		vars.Helper["TerminalText"] = mono.MakeString("HUDManager", "Instance", "terminalScript", "currentText");
 		vars.Helper["TotalEnemies"] = mono.Make<int>("HUDManager", "Instance", "terminalScript", "enemyFiles", 0x18); // List<T>._size
 		vars.Helper["ScannedEnemies"] = mono.MakeList<int>("HUDManager", "Instance", "terminalScript", "scannedEnemyIDs");
 
