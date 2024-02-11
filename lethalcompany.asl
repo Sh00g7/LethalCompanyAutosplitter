@@ -67,7 +67,17 @@ startup
 				{ "creatures", "c15", false, "Roaming locust" },
 				{ "creatures", "c16", false, "Baboon hawk" },
 				{ "creatures", "c17", false, "Nutcracker" },
-			{ "bestiary", "completeBestiary", false, "Complete Bestiary" }
+			{ "bestiary", "completeBestiary", false, "Complete Bestiary" },
+
+		{ null, "killing", false, "Kill% Splits" },
+			{ "killing", "indoorskills", false, "Indoors Creatures" },
+				{ "indoorskills", "indpower3", false, "Bunker Spider/Thumper/Bracken" },
+				{ "indoorskills", "indpower1", false, "Snare Flea/Hoarding Bug/Nutcracker/Masked" },
+			{ "killing", "daytimekills", false, "Daytime Creatures" },
+				{ "daytimekills", "daypower1", false, "Manticoil" },
+			{ "killing", "nighttimekills", false, "Nighttime Creatures" },
+				{ "nighttimekills", "nightpower2", false, "Eyeless Dog" },
+				{ "nighttimekills", "nightpower1", false, "Baboon Hawk" }
 	};
 
 	vars.Helper.Settings.CreateCustom(_settings, 4, 1, 2, 3);
@@ -88,6 +98,16 @@ init
 
 		vars.Helper["AllPlayersDead"] = mono.Make<bool>("StartOfRound", "Instance", "allPlayersDead");
 		vars.Helper["ShipLeaving"] = mono.Make<bool>("StartOfRound", "Instance", "shipIsLeaving");
+
+		vars.Helper["UsingItem"] = mono.Make<bool>("RoundManager", "Instance", "playersManager", "localPlayerController", "activatingItem");
+		vars.Helper["ItemCd"] = mono.Make<float>("RoundManager", "Instance", "playersManager", "localPlayerController", "currentlyHeldObjectServer", "currentUseCooldown");
+
+		vars.Helper["IndoorsPower"] = mono.Make<int>("RoundManager", "Instance", "currentEnemyPower");
+		vars.Helper["NightPower"] = mono.Make<int>("RoundManager", "Instance", "currentOutsideEnemyPower");
+		vars.Helper["DayPower"] = mono.Make<int>("RoundManager", "Instance", "currentDaytimeEnemyPower");
+
+		vars.Helper["PlayerCount"] = mono.Make<int>("GameNetworkManager", "Instance", "connectedPlayers");
+		vars.Helper["EnemySpawning"] = mono.Make<bool>("RoundManager", "Instance", "isSpawningEnemies");
 
 		return true;
 	});
@@ -135,6 +155,27 @@ split
 	if (old.TerminalText != current.TerminalText && current.TerminalText.Contains("There are 0 objects"))
 	{
 		return settings["l" + current.LevelId + "-h"];
+	}
+
+	if (((old.UsingItem != current.UsingItem) && old.UsingItem) || ((old.ItemCd < current.ItemCd) && current.ItemCd > 0) || (current.PlayerCount > 1 && current.EnemySpawning))
+	{
+		if (old.IndoorsPower > current.IndoorsPower)
+    		{
+			int pLoss = old.IndoorsPower - current.IndoorsPower;
+        		return settings["indpower" + pLoss];
+    		}
+
+		if (old.NightPower > current.NightPower)
+    		{
+			int pLoss = old.NightPower - current.NightPower;
+        		return settings["nightpower" + pLoss];
+    		}
+
+		if (old.DayPower > current.DayPower)
+    		{
+			int pLoss = old.DayPower - current.DayPower;
+        		return settings["daypower" + pLoss];
+    		}
 	}
 }
 
